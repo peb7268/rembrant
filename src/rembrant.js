@@ -1,4 +1,10 @@
 
+if(typeof module !== 'undefined'){
+	var process = require('process');
+	var args 	= process.argv;
+}
+
+
 function Rembrant(){
 	this.resolveSymbol  = function(shape){
 		var x2 = shape.x2, 
@@ -6,7 +12,7 @@ function Rembrant(){
 		    x  = shape.x,
 		    y  = shape.y;
 
-		if(typeof r.canvas.content !== 'undefined' && r.canvas.content.length > 0 && typeof r.colour == 'undefined') return 'x';
+		if(typeof rembrant.canvas.content !== 'undefined' && rembrant.canvas.content.length > 0 && typeof rembrant.colour == 'undefined') return 'x';
 
 		var limit 		= y2 + 2;
 		var isLastRow   = (y == limit - 1);
@@ -27,7 +33,7 @@ function Rembrant(){
 				var rowData = {
 					'x': this.getRowStart(x2, y)
 				}
-				r.canvas.rows.push(rowData);
+				rembrant.canvas.rows.push(rowData);
 			}
 
 			return "|\n";
@@ -105,9 +111,9 @@ function Rembrant(){
 		var symbol = this.resolveSymbol(shape);
 
 		//If plotting points
-		if(typeof r.canvas.content !== 'undefined'){
+		if(typeof rembrant.canvas.content !== 'undefined'){
 			if(this.isInRange(x, y, x1, y1, x2, y2)){
-				var rowStartingIdx = r.canvas.rows[y - 1].x;
+				var rowStartingIdx = rembrant.canvas.rows[y - 1].x;
 				var plotPosition   = rowStartingIdx + x;
 
 				var prebuffer = buffer.slice(0, plotPosition);  //canvas up to insertion				
@@ -129,14 +135,15 @@ function Rembrant(){
 }
 
 Rembrant.prototype.C = function(x1, y1, x2, y2){
-	var canvas;
-	r.canvas 		 = canvas =  {
+	rembrant.canvas  =  {
 		rows: [],
 		canvas_length: x2,
 		canvas_height: y2
 	};
 
-	canvas.content   = r.processCanvas(x1, y1, x2, y2).trim();
+	rembrant.canvas.content = rembrant.processCanvas(x1, y1, x2, y2).trim();
+
+	return rembrant.canvas;
 }
 
 /*
@@ -157,11 +164,39 @@ Rembrant.prototype.B = function(){}
 
 Rembrant.prototype.Q = function(){}
 
-(function(){
+
+var x1;
+var y1;
+var x2;
+var y2;
+
+if(typeof module !== 'undefined') {
+	var rembrant  = new Rembrant();
+
+	module.exports   = rembrant;
+	module.exports   = C = rembrant.C;
+	module.exports   = L = rembrant.L;
+	module.exports   = R = rembrant.R;
+	module.exports   = B = rembrant.B;
+	module.exports   = Q = rembrant.Q;
+
+	x2 = args[2];
+	y2 = args[3];
+
+} else {
 	window.rembrant  = window.r = new Rembrant();
 	window.C = r.C;
 	window.L = r.L;
 	window.R = r.R;
 	window.B = r.B;
 	window.Q = r.Q;
-}());
+
+	x2 = 20;
+	y2 = 4;
+}
+
+x1 = 0;
+y1 = 0;
+
+var canvas = rembrant.C(x1, y1, x2, y2);
+rembrant.draw(canvas);
