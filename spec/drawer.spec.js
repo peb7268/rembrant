@@ -1,11 +1,14 @@
 
+var r;
+
 describe('Should create a drawing application', function(){
-	var x1, y1, x2, y2;
 	beforeEach(function(){
-		x1 = 0;
-		y1 = 0;
-		x2 = 20;
-		y2 = 4;
+		r = rembrant;
+
+		var x1 = 0;
+		var y1 = 0;
+		var x2 = 20;
+		var y2 = 4;
 
 		r.C(x1, y1, x2, y2);
 	});
@@ -42,7 +45,7 @@ describe('Should create a drawing application', function(){
 		});
 
 		it('should contain x rows in the body', function(){
-			expect(r.canvas.rows.length).toEqual(4);
+			expect(r.canvas.rows.length).toEqual(3);
 		});
 		
 		it('should make the footer', function(){
@@ -56,12 +59,11 @@ describe('Should create a drawing application', function(){
 	});
 
 	describe('Should draw a line on the canvas', function(){
-		it('should make a vertical line starting at 2, 1', function(){
-			var x1, y1, x2, y2;
-			x1 = 2;
-			y1 = 1;
-			x2 = 2;
-			y2 = 3;
+		it('should make a vertical line from 2,1 to 2,3', function(){
+			var x1 = 2,
+				y1 = 1,
+				x2 = 2,
+				y2 = 3;
 
 			r.canvas.content = r.L(x1, y1, x2, y2, r.canvas);
 
@@ -71,17 +73,22 @@ describe('Should create a drawing application', function(){
 			var rowStart = rows[y1];
 			var _char    = content[rowStart.x];
 
+			x  = r.getRowStart(r.canvas.canvas_length, y1) + x1;
+			xx = r.getRowStart(r.canvas.canvas_length, y2) + x1;
+			
 			console.log(content);
-			expect(1).toBe(1);
+
+			expect(content[x]).toBe('x');
+			expect(content[xx]).toBe('x');
 		});
 
 		it('should make a horizontal line from 2, 1 to 10, 1', function(){
-			var x1, y1, x2, y2;
-			x1 = 2;
-			y1 = 1;
-			x2 = 10;
-			y2 = 1;
-			
+			var x1 = 2;
+				y1 = 1,
+				x2 = 10,
+				y2 = 1,
+				x, y;
+
 			r.canvas.content = r.L(x1, y1, x2, y2, r.canvas);
 
 			//Get the starting character of row 2
@@ -90,16 +97,27 @@ describe('Should create a drawing application', function(){
 			var rowStart = rows[y1];
 			var _char    = content[rowStart.x];
 
+			x = r.getRowStart(r.canvas.canvas_length, y1) + x1;
+			xx = r.getRowStart(r.canvas.canvas_length, y2) + x1;
+
 			console.log(content);
-			expect(1).toBe(1);
+
+			expect(content[x]).toBe('x');
+			expect(content[xx]).toBe('x');
 		});
+	});
 
-
-		xit('should print a line from x1 to x2', function(){});
-		xit('should subtract however many chartacters it inserts into the row after the line', function(){});
+	describe('Should make a rectangle', function(){
+		it('should make four number of passes thought the main loop', function(){
+			expect(1).toBe(2);
+		});
+		it('should have two horizontal lines', function(){
+			expect(1).toBe(2);
+		});
+		it('should have two vertical lines', function(){
+			expect(1).toBe(2);
+		});
 	});
 	
-	afterEach(function(){
-		
-	});
+	afterEach(function(){});
 });

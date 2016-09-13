@@ -184,12 +184,12 @@ if(typeof module !== 'undefined') {
 	y2 = args[3];
 
 } else {
-	window.rembrant  = window.r = new Rembrant();
-	window.C = r.C;
-	window.L = r.L;
-	window.R = r.R;
-	window.B = r.B;
-	window.Q = r.Q;
+	window.rembrant  = new Rembrant();
+	window.C = rembrant.C;
+	window.L = rembrant.L;
+	window.R = rembrant.R;
+	window.B = rembrant.B;
+	window.Q = rembrant.Q;
 
 	x2 = 20;
 	y2 = 4;
